@@ -1,0 +1,17 @@
+{
+  "name": "studylang-backend",
+  "version": "1.0.0",
+  "description": "StudyLang Compiler Backend — AlgoVengers",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "AlgoVengers",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.1"
+  }
+}
