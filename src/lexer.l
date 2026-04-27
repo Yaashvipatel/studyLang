@@ -1,3 +1,6 @@
+
+//lexer.l
+
 %{
 #include <stdio.h>
 #include <string.h>
@@ -24,6 +27,7 @@ static void record(TokenType tt, const char *val) {
 %option caseless
 %option yylineno
 %option nomain
+
 
 
 ACTION  study|revise|practice|review|complete|finish|read|solve|attempt|prepare|memorize|memorise|watch|write|understand|analyze|analyse|summarize|summarise|implement|debug|test|code|draw|research|explore|learn|master|attend|plan|schedule|organize|organise|cover|tackle|focus|work|do|start|begin|continue|go|through|brush|up|catch|glance|skim|scan|assess|evaluate|check|verify|run|execute|compile|build|design|create|develop|improve|revamp|rethink|rewrite|redo|repeat|go|through|recall|recite|explain|teach|present|discuss|collaborate|brainstorm|outline|draft|edit|proofread|publish|submit|upload|download|install|configure|deploy|test|benchmark|profile|optimize|refactor|document|comment|review|merge|push|pull|clone|fork|branch|commit|review|iterate|prototype|sketch|model|simulate|validate|experiment|hypothesize|formulate|derive|prove|calculate|compute|solve|evaluate|integrate|differentiate|apply|practice|drill|exercise|attempt|try
