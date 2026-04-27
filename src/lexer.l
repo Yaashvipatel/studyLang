@@ -1,6 +1,3 @@
-
-//lexer.l
-
 %{
 #include <stdio.h>
 #include <string.h>
