@@ -1,19 +1,3 @@
-/*
- * main.c  —  StudyLang Compiler Driver
- *
- * Outputs each phase result to stdout in a structured format
- * that the Node.js backend can split and serve separately.
- *
- * Phase markers:
- *   @@PHASE1_START@@ ... @@PHASE1_END@@
- *   @@PHASE2_START@@ ... @@PHASE2_END@@
- *   @@PHASE3_START@@ ... @@PHASE3_END@@
- *   @@PHASE4_START@@ ... @@PHASE4_END@@
- *   @@LEX_ERRORS@@  (JSON array of lex errors)
- *   @@SYN_ERRORS@@  (JSON array of syn errors)
- *   @@SEM_ERRORS@@  (JSON array of sem errors)
- */
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -31,7 +15,6 @@ int  semanticAnalyzer(ASTNode *root);
 void generateICG(ASTNode *root);
 void print_phase3(FILE *fp);
 
-/* Escape string for JSON */
 static void json_escape(FILE *fp, const char *s) {
     fputc('"', fp);
     for (; *s; s++) {
@@ -62,7 +45,7 @@ static void emit_errors_json(FILE *fp,
 }
 
 static void compile(const char *input) {
-    /* ---- Reset global state ---- */
+   
     token_count     = 0;
     lex_errors      = 0;
     parse_errors    = 0;
@@ -71,14 +54,12 @@ static void compile(const char *input) {
     syn_error_count = 0;
     sem_error_count = 0;
 
-    /* ---- Single lex+parse pass ---- */
+   
     yy_scan_string(input);
     int parse_ret = yyparse();
     yylex_destroy();
 
-    /* ================================================================
-       PHASE 1: LEXICAL ANALYSIS
-       ================================================================ */
+    
     printf("\n@@PHASE1_START@@\n");
     printf("=== PHASE 1: LEXICAL ANALYSIS ===\n\n");
     printf("  Input: %s\n\n", input);
@@ -106,10 +87,8 @@ static void compile(const char *input) {
     }
     printf("@@PHASE1_END@@\n");
 
-    /* Emit lex errors as JSON */
     emit_errors_json(stdout, "LEX", lex_error_list, lex_error_count);
 
-    /* Stop after lex if there were errors */
     if (lex_errors > 0) {
         printf("\n@@PHASE2_START@@\n");
         printf("=== PHASE 2: SYNTAX ANALYSIS ===\n\n");
@@ -130,9 +109,7 @@ static void compile(const char *input) {
         return;
     }
 
-    /* ================================================================
-       PHASE 2: SYNTAX ANALYSIS
-       ================================================================ */
+
     printf("\n@@PHASE2_START@@\n");
     printf("=== PHASE 2: SYNTAX ANALYSIS ===\n\n");
 
@@ -181,7 +158,6 @@ static void compile(const char *input) {
         return;
     }
 
-    /* Print AST */
     printf("\n  Parse Tree (AST):\n");
     int flags[64] = {0};
     ast_print(parse_tree_root, 0, flags);
@@ -189,9 +165,7 @@ static void compile(const char *input) {
     printf("@@PHASE2_END@@\n");
     emit_errors_json(stdout, "SYN", syn_error_list, 0);
 
-    /* ================================================================
-       PHASE 3: SEMANTIC ANALYSIS
-       ================================================================ */
+
     printf("\n@@PHASE3_START@@\n");
     int sem_ok = semanticAnalyzer(parse_tree_root);
     print_phase3(stdout);
@@ -209,9 +183,6 @@ static void compile(const char *input) {
         return;
     }
 
-    /* ================================================================
-       PHASE 4: INTERMEDIATE CODE GENERATION
-       ================================================================ */
     printf("\n@@PHASE4_START@@\n");
     generateICG(parse_tree_root);
     printf("\n  [PASSED] Intermediate code generation complete.\n");
@@ -239,7 +210,6 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    /* Interactive / single input from stdin */
     char line[1024];
     if (fgets(line, sizeof(line), stdin)) {
         line[strcspn(line, "\r\n")] = '\0';
